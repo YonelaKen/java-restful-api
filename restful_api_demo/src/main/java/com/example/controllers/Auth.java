@@ -16,10 +16,22 @@ import kotlin.Pair;
 
 public class Auth implements AccessManager{
 
-    private static Map<Pair<String, String>, List<Role>> UserRolesMap = Map.of(
+    @Override
+    public void manage(Handler handler, Context ctx, Set<? extends RouteRole> permittedRoles) throws Exception {
+        if (permittedRoles.contains(Role.ANYONE) || userRoles(ctx).stream().toList().contains(Role.ADMIN)) {
+            handler.handle(ctx);
+        } else if (userRoles(ctx).stream().anyMatch(permittedRoles::contains)) {
+            handler.handle(ctx);
+        } else {
+            ctx.header(Header.WWW_AUTHENTICATE, "Basic");
+            throw new UnauthorizedResponse();
+        }
+    }
+
+    private Map<Pair<String, String>, List<Role>> UserRolesMap = Map.of(
         new Pair<>("alice", "weak-1234"), Arrays.asList(Role.USER_READ),
         new Pair<>("bob", "weak-123456"), Arrays.asList(Role.USER_READ, Role.USER_WRITE),
-        new Pair<>("yonela", "iamAdmin-12345"), Arrays.asList(Role.USER_READ, Role.USER_WRITE, Role.ADMIM)
+        new Pair<>("yonela", "iamAdmin-12345"), Arrays.asList(Role.ADMIN)
     );
 
     /**
@@ -29,7 +41,7 @@ public class Auth implements AccessManager{
      * @param ctx The context of the request.
      * @return A pair of strings.
      */
-    private static Pair<String, String> getBasicAuthCredentials(Context ctx) {
+    private Pair<String, String> getBasicAuthCredentials(Context ctx) {
         String authHeader = ctx.header("Authorization");
         if (authHeader != null && authHeader.startsWith("Basic")) {
             String encodedCredentials = authHeader.substring("Basic".length()).trim();
@@ -47,7 +59,7 @@ public class Auth implements AccessManager{
      * @param ctx The context of the request.
      * @return A list of roles
      */
-    public static List<Role> userRoles(Context ctx) {
+    private List<Role> userRoles(Context ctx) {
         Pair<String, String> credentials = getBasicAuthCredentials(ctx);
         if (credentials != null) {
             List<Role> roles = UserRolesMap.get(credentials);
@@ -57,18 +69,4 @@ public class Auth implements AccessManager{
         }
         return List.of();
     }
-
-    @Override
-    public void manage(Handler handler, Context ctx, Set<? extends RouteRole> permittedRoles) throws Exception {
-        if (permittedRoles.contains(Role.ANYONE)) {
-            handler.handle(ctx);
-        } else if (userRoles(ctx).stream().anyMatch(permittedRoles::contains)) {
-            handler.handle(ctx);
-        } else {
-            ctx.header(Header.WWW_AUTHENTICATE, "Basic");
-            throw new UnauthorizedResponse();
-        }
-        
-    }
-
 }
