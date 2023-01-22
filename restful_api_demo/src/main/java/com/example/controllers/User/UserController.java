@@ -1,5 +1,7 @@
 package com.example.controllers.User;
 
+import com.example.controllers.User.DAO.UserDAO;
+
 import io.javalin.http.Context;
 
 public class UserController {
@@ -9,8 +11,7 @@ public class UserController {
     }
 
     public static void createUser(Context ctx) {
-        UserDAO.createUser(ctx.bodyAsClass(User.class));
-        ctx.result("User created successfully");
+        ctx.result(UserDAO.createUser(ctx.bodyAsClass(User.class)));
     }
 
     public static void getUserById(Context ctx) {
@@ -18,13 +19,11 @@ public class UserController {
     }
 
     public static void updateUser(Context ctx) {
-        UserDAO.updateUser(ctx.pathParam("userId"), ctx.bodyAsClass(User.class));
-        ctx.result("User details updated successfully");
+        ctx.result(UserDAO.updateUser(ctx.pathParam("userId"), ctx.bodyAsClass(User.class)));
     }
 
     public static void deleteUser(Context ctx) {
-        UserDAO.deleteUser(ctx.pathParam("userId"));
-        ctx.result("User deleted successfully");
+        ctx.result(UserDAO.deleteUser(ctx.pathParam("userId")));
     }
-    
+
 }

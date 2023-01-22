@@ -2,27 +2,26 @@ package com.example;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
 public class AppTest {
 
-    App app;
-    @BeforeEach
-    public void setUp(){
+    static App app;
+    @BeforeAll
+    public static void setUp(){
         app = new App();
         app.setUpServer();
         app.start();
     }
 
-    @AfterEach
-    public void tearDown() throws InterruptedException{
+    @AfterAll
+    public static void tearDown() throws InterruptedException{
         app.stop();
         app = null;
-        Thread.sleep(2000);
     }
 
     @Test
@@ -35,6 +34,12 @@ public class AppTest {
     public void sendGetUserByIdRequestValidUser() {
         HttpResponse<String> response  = Unirest.get("http://localhost:7070/users/2").basicAuth("yonela", "iamAdmin-12345").asString();
         assertEquals("{\"name\":\"Bob\",\"email\":\"bob@bob.kt\"}", response.getBody());
+    }
+
+    @Test
+    public void sendGetUserByIdRequestValidUserInvalidId() {
+        HttpResponse<String> response  = Unirest.get("http://localhost:7070/users/200").basicAuth("yonela", "iamAdmin-12345").asString();
+        assertEquals("{\"message\": \"User does not exist.\"}", response.getBody());
     }
 
     @Test
@@ -57,14 +62,20 @@ public class AppTest {
 
     @Test
     public void sendPatchRequestInvalidUser() {
-        HttpResponse<String> response = Unirest.patch("http://localhost:7070/users/1").body("{\"name\":\"testName\", \"email\":\"test@email\"}").basicAuth("mm", "invalidPassword").asString();
+        HttpResponse<String> response = Unirest.patch("http://localhost:7070/users/3").body("{\"name\":\"testName\", \"email\":\"test@email\"}").basicAuth("mm", "invalidPassword").asString();
         assertEquals("Unauthorized", response.getBody());
     }
 
     @Test
     public void sendPatchRequestValidUser() {
-        HttpResponse<String> response = Unirest.patch("http://localhost:7070/users/1").body("{\"name\":\"testName\", \"email\":\"test@email\"}").basicAuth("yonela", "iamAdmin-12345").asString();
+        HttpResponse<String> response = Unirest.patch("http://localhost:7070/users/3").body("{\"name\":\"testName\", \"email\":\"test@email\"}").basicAuth("yonela", "iamAdmin-12345").asString();
         assertEquals("User details updated successfully", response.getBody());
+    }
+
+    @Test
+    public void sendPatchRequestValidUserButInvalidUserId() {
+        HttpResponse<String> response = Unirest.patch("http://localhost:7070/users/5000").body("{\"name\":\"testName\", \"email\":\"test@email\"}").basicAuth("yonela", "iamAdmin-12345").asString();
+        assertEquals("Unable to update user details.Could not find user with ID : 5000", response.getBody());
     }
 
     @Test
@@ -77,6 +88,12 @@ public class AppTest {
     public void sendDeleteRequestValidUser() {
         HttpResponse<String> response = Unirest.delete("http://localhost:7070/users/1").body("{\"name\":\"testName\", \"email\":\"test@email\"}").basicAuth("yonela", "iamAdmin-12345").asString();
         assertEquals("User deleted successfully", response.getBody());
+    }
+
+    @Test
+    public void sendDeleteRequestValidUserButInvalidUserId() {
+        HttpResponse<String> response = Unirest.delete("http://localhost:7070/users/1000").body("{\"name\":\"testName\", \"email\":\"test@email\"}").basicAuth("yonela", "iamAdmin-12345").asString();
+        assertEquals("Could not find user with ID : 1000", response.getBody());
     }
 
 }

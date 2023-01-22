@@ -1,8 +1,10 @@
-package com.example.controllers.User;
+package com.example.controllers.User.DAO;
 
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+
+import com.example.controllers.User.User;
 
 public class UserDAO {
     private static HashMap<String, User> users = new HashMap<>();
@@ -24,18 +26,24 @@ public class UserDAO {
     }
 
     public static Object getUserById(String userID) {
-        return users.get(userID);
+        return users.get(userID) != null ? users.get(userID) : "{\"message\": \"User does not exist.\"}";
     }
 
-    public static void createUser(User user) {
+    public static String createUser(User user) {
         users.put(randomId(), user);
+        return "User created successfully";
     }
 
-    public static void updateUser(String userId, User user) {
+    public static String updateUser(String userId, User user) {
+        if (users.get(userId) == null)
+            return "Unable to update user details.Could not find user with ID : "+ userId;
         users.put(userId, user);
+        return "User details updated successfully";
     }
 
-    public static void deleteUser(String userId) {
+    public static String deleteUser(String userId) {
+        if (!getUserById(userId).getClass().equals(User.class)) return "Could not find user with ID : "+ userId;
         users.remove(userId);
+        return "User deleted successfully";
     }
 }
