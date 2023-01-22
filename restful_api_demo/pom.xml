@@ -68,7 +68,6 @@
         </repository>
     </distributionManagement>
 
-
     <build>
         <plugins>
             <plugin>
@@ -123,7 +122,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classifier>test</classifier>
+                            <classifier>demo</classifier>
                             <classesDirectory>${project.build.directory}/dependency</classesDirectory>
                             <finalName>
                                 ${project.artifactId}-${project.version}-jar-with-dependencies</finalName>
