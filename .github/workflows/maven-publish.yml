@@ -31,6 +31,6 @@ jobs:
       run: mvn -B package --file restful_api_demo/pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/restful_api_demo/settings.xml
+      run: mvn deploy  -DskipTests -s $GITHUB_WORKSPACE/restful_api_demo/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
