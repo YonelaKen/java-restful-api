@@ -26,17 +26,15 @@ jobs:
         java-version: 17
         distribution: temurin
         cache: 'maven'
-    - name: Change directory
-      run: cd restful_api_demo
 
     - name: Run Maven clean
-      run: mvn clean
+      run: mvn clean --file restful_api_demo/pom.xml
 
     - name: Run Maven compile
-      run: mvn compile
+      run: mvn compile --file restful_api_demo/pom.xml
 
     - name: Run Maven test
-      run: mvn test -DskipTests=false
+      run: mvn test -DskipTests=false --file restful_api_demo/pom.xml
 
     - name: Run Maven package
-      run: mvn package -DskipTests=true
+      run: mvn package -DskipTests=true --file restful_api_demo/pom.xml
