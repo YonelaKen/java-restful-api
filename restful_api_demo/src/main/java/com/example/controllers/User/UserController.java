@@ -5,13 +5,13 @@ import com.example.controllers.User.DAO.UserDAO;
 import io.javalin.http.Context;
 
 public class UserController {
-
+    
     public static void getAllUserIds(Context ctx) {
         ctx.json(UserDAO.getUsers());
     }
 
     public static void createUser(Context ctx) {
-        ctx.result(UserDAO.createUser(ctx.bodyAsClass(User.class)));
+        ctx.result(UserDAO.createUser(ctx));
     }
 
     public static void getUserById(Context ctx) {

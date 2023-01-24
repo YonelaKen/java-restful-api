@@ -7,11 +7,12 @@ import io.javalin.security.AccessManager;
 import io.javalin.security.RouteRole;
 
 import java.util.Set;
+
+import com.example.controllers.User.DAO.UserDAO;
+
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 import kotlin.Pair;
 
 public class Auth implements AccessManager{
@@ -28,12 +29,6 @@ public class Auth implements AccessManager{
         }
     }
 
-    private Map<Pair<String, String>, List<Role>> UserRolesMap = Map.of(
-        new Pair<>("alice", "weak-1234"), Arrays.asList(Role.USER_READ),
-        new Pair<>("bob", "weak-123456"), Arrays.asList(Role.USER_READ, Role.USER_WRITE),
-        new Pair<>("yonela", "iamAdmin-12345"), Arrays.asList(Role.ADMIN)
-    );
-
     /**
      * It takes the "Authorization" header from the request, decodes it, and returns a pair of strings
      * containing the username and password
@@ -41,7 +36,7 @@ public class Auth implements AccessManager{
      * @param ctx The context of the request.
      * @return A pair of strings.
      */
-    private Pair<String, String> getBasicAuthCredentials(Context ctx) {
+    public static Pair<String, String> getBasicAuthCredentials(Context ctx) {
         String authHeader = ctx.header("Authorization");
         if (authHeader != null && authHeader.startsWith("Basic")) {
             String encodedCredentials = authHeader.substring("Basic".length()).trim();
@@ -62,7 +57,7 @@ public class Auth implements AccessManager{
     private List<Role> userRoles(Context ctx) {
         Pair<String, String> credentials = getBasicAuthCredentials(ctx);
         if (credentials != null) {
-            List<Role> roles = UserRolesMap.get(credentials);
+            List<Role> roles = UserDAO.getCredsFromUserRolesMap(credentials);
             if (roles != null) {
                 return roles;
             }
