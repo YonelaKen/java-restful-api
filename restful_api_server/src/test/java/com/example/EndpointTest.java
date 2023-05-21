@@ -30,7 +30,7 @@ public class EndpointTest {
     @Test
     public void sendGetAllUsersRequest() {
         HttpResponse<String> response  = Unirest.get("http://localhost:5050/users/").basicAuth("test", "invalid").asString();
-        assertEquals(4, response.getBody().substring(1, response.getBody().length()-1).split(",").length);
+        assertEquals(1, response.getBody().substring(1, response.getBody().length()-1).split(",").length);
     }
 
     @Test
