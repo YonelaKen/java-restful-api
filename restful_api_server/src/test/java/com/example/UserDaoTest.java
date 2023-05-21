@@ -9,9 +9,10 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import com.example.User.Message;
+import com.example.User.User;
+import com.example.User.DAO.UserDAO;
 import com.example.controllers.Role;
-import com.example.controllers.User.User;
-import com.example.controllers.User.DAO.UserDAO;
 
 import kotlin.Pair;
 public class UserDaoTest {
@@ -52,26 +53,26 @@ public class UserDaoTest {
 
     @Test
     public void testUpdateUserValidId(){
-        String result = UserDAO.updateUser("2", new User("Bob update", "bob@testing"));
-        assertEquals(result, "User details updated successfully");
+        Message result = UserDAO.updateUser("2", new User("Bob update", "bob@testing"));
+        assertEquals(result.getMessage(), "User details updated successfully");
     }
 
     @Test
     public void testUpdateUserInvalidId(){
-        String result = UserDAO.updateUser("12", new User("Alice 1", "alice@testing"));
-        assertEquals(result, "Unable to update user details.Could not find user with ID : 12");
+        Message result = UserDAO.updateUser("12", new User("Alice 1", "alice@testing"));
+        assertEquals(result.getMessage(), "Unable to update user details.Could not find user with ID : 12");
     }
 
     @Test
     public void testDeleteUserInvalidId(){
-        String result = UserDAO.deleteUser("12");
-        assertEquals("Could not find user with ID : 12", result);
+        Message result = UserDAO.deleteUser("12");
+        assertEquals("Could not find user with ID : 12", result.getMessage());
     }
 
     @Test
     public void testDeleteUserValidId() {
-        String result = UserDAO.deleteUser("3");
-        assertEquals("User deleted successfully", result);
+        Message result = UserDAO.deleteUser("3");
+        assertEquals("User deleted successfully", result.getMessage());
     }
 
     @Test

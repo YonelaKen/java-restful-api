@@ -105,8 +105,28 @@ div.error {
     color: red;
     width: 60%;
 }
+form{
+  width: 50%;
+}
+#app, #form{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 
-div.stacktrace {
-    font-size: small;
-    font-family: monospace;
+#actionOpt{
+  font-size: large;
+  background-color: #4CAF50;
+  border-radius: 10px;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }

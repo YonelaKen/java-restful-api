@@ -8,7 +8,7 @@ import io.javalin.security.RouteRole;
 
 import java.util.Set;
 
-import com.example.controllers.User.DAO.UserDAO;
+import com.example.User.DAO.UserDAO;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

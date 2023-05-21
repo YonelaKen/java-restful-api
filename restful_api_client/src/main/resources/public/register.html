@@ -1,0 +1,31 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <main id="app">
+
+        <h1>Register User Page</h1>
+        <div id="form">
+            <form method="post" action="/users/register" enctype="application/x-www-form-urlencoded">
+                <label for="name">Enter your name</label>
+                <input type="text" name="name" id="name" autofocus required>
+                <label for="email">Enter your email</label>
+                <input type="email" name="email" id="email" required>
+                <label for="password">Enter your password</label>
+                <input type="password" name="password" id="password" required>
+                <input type="submit" value="submit" id="submitBtn">
+            </form>
+        </div>
+        <p>Already have a account? <a href="/login.html">login</a>  </form> </p>
+
+    </main>
+</body>
+
+</html>

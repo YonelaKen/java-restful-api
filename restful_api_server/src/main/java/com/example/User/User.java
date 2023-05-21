@@ -1,4 +1,4 @@
-package com.example.controllers.User;
+package com.example.User;
 
 public class User {
     private String name = "";
