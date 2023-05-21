@@ -28,13 +28,13 @@ jobs:
         cache: 'maven'
 
     - name: Run Maven clean
-      run: mvn clean --file restful_api_demo/pom.xml
+      run: mvn clean --file restful_api_server/pom.xml
 
     - name: Run Maven compile
-      run: mvn compile --file restful_api_demo/pom.xml
+      run: mvn compile --file restful_api_server/pom.xml
 
     - name: Run Maven test
-      run: mvn test -DskipTests=false --file restful_api_demo/pom.xml
+      run: mvn test -DskipTests=false --file restful_api_server/pom.xml
 
     - name: Run Maven package
-      run: mvn package -DskipTests=true --file restful_api_demo/pom.xml
+      run: mvn package -DskipTests=true --file restful_api_server/pom.xml
